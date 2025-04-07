@@ -156,16 +156,98 @@
 # print(img.shape)  # (28, 28)
 # img_show(img)
 
+# import sys, os
+# sys.path.append(os.pardir)
+# from dataset.mnist import load_mnist
+
+# (x_train, t_train), (x_test, t_test) = load_mnist(normalize=False, flatten=True, one_hot_label=True)
+
+# print(x_train.shape)  # (60000, 784)
+# print(t_train.shape)  # (60000, 10)
+
+# train_size = x_train.shape[0]  # 训练集大小
+# # print(train_size)  # 60000
+# batch_size = 10  # 批量大小
+# batch_mask = np.random.choice(train_size, batch_size)  # 随机选择10个样本
+# x_train_batch = x_train[batch_mask]  # 选取对应的训练数据
+# t_train_batch = t_train[batch_mask]  # 选取对应的标签数据
+
+# import numpy as np
+# from util import *
+
+# class simpleNet:
+#     def __init__(self):
+#         self.W = np.random.rand(2, 3)
+
+#     def predict(self, x):
+#         y = np.dot(x, self.W)
+#         return y
+    
+#     def loss(self, x, t):
+#         z = self.predict(x)
+#         y = softmax(z)
+#         loss = cross_entropy_error(y, t)
+#         return loss
+
+
+# if __name__ == "__main__":
+#     net = simpleNet()
+#     print(net.W)  # 随机初始化权重
+#     x = np.array([0.6, 0.9])
+#     p = net.predict(x)  # 预测结果
+#     print("p: ",p)  # 预测结果
+#     print("p max index: ",np.argmax(p))  # 预测结果最大值的索引
+#     t = np.array([0, 0, 1])  # 真实标签
+#     print("loss: ",net.loss(x, t))  # 损失值
+
+#     def f(W):
+#         return net.loss(x, t)
+
+#     dw = numerical_gradient(f, net.W)  # 数值梯度
+#     print("dw: ", dw)  # 数值梯度
+
+
 import sys, os
 sys.path.append(os.pardir)
-from dataset.mnist import load_mnist
+from util import *
+import numpy as np
 
-(x_train, t_train), (x_test, t_test) = load_mnist(normalize=False, flatten=True, one_hot_label=True)
+class TwoLayerNet:
+    def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
+        self.params = {}
+        self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size) 
+        self.params['b1'] = np.zeros(hidden_size)
+        self.params['W2'] = weight_init_std * np.random.randn(hidden_size, output_size)
+        self.params['b2'] = np.zeros(output_size)
+    
+    def predict(self, x):
+        W1, W2 = self.params['W1'], self.params['W2']
+        b1, b2 = self.params['b1'], self.params['b2']
 
-print(x_train.shape)  # (60000, 784)
-print(t_train.shape)  # (60000, 10)
+        a1 = np.dot(x, W1) + b1
+        z1 = sigmoid(a1)
+        a2 = np.dot(z1, W2) + b2
+        y = softmax(a2)
+        
+        return y
+    
+    def loss(self, x, t):
+        y = self.predict(x)
+        return cross_entropy_error(y, t)
+    
+    def accuracy(self, x, t):
+        y = self.predict(x)
+        y = np.argmax(y, axis=1)
+        t = np.argmax(t, axis=1)
+        accuracy = np.sum(y == t) / float(x.shape[0])
+        return accuracy
+    
+    def numerical_gradient(self, x, t):
+        loss_W = lambda W: self.loss(x, t)
+        grads = {}
+        grads['W1'] = numerical_gradient(loss_W, self.params['W1'])
+        grads['b1'] = numerical_gradient(loss_W, self.params['b1'])
+        grads['W2'] = numerical_gradient(loss_W, self.params['W2'])
+        grads['b2'] = numerical_gradient(loss_W, self.params['b2'])
 
-train_size = x_train.shape[0]  # 训练集大小
-# print(train_size)  # 60000
-
-
+        return grads
