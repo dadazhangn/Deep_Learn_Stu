@@ -25,11 +25,19 @@ def mean_squared_error(y, t):
 
 
 def  cross_entropy_error(y, t):
-    if y.ndim == 1:
-        t = t.reshape(1, t.size)
-        y = y.reshape(1, y.size)
-    batch_size = y.shape[0]  # 批量大小
-    return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size  # 1e-7是为了避免log(0)的情况
+    # if y.ndim == 1:
+    #     t = t.reshape(1, t.size)
+    #     y = y.reshape(1, y.size)
+    # batch_size = y.shape[0]  # 批量大小
+      if y.ndim == 1:
+        y = y.reshape(1, -1)
+        t = t.reshape(1, -1)
+
+      if t.size == y.size:
+        t = t.argmax(axis=1)  # one-hot 转成标签喵
+
+      batch_size = y.shape[0]
+      return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size  # 1e-7是为了避免log(0)的情况
 
 
 def numerical_diff(f, x):
