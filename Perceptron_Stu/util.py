@@ -34,7 +34,7 @@ def  cross_entropy_error(y, t):
         t = t.reshape(1, -1)
 
       if t.size == y.size:
-        t = t.argmax(axis=1)  # one-hot 转成标签喵
+        t = t.argmax(axis=1)  # one-hot 转成标签
 
       batch_size = y.shape[0]
       return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size  # 1e-7是为了避免log(0)的情况
