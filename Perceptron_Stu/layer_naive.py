@@ -16,3 +16,17 @@ class MulLayer:
         dy = dout * self.x
         
         return dx, dy
+    
+class AddLayer:
+    def __init__(self):
+        pass
+    
+    def forward(self, x0, x1):
+        out = x0 + x1
+        return out
+    
+    def backward(self, dout):
+        dx0 = dout * 1
+        dx1 = dout * 1
+        
+        return dx0, dx1

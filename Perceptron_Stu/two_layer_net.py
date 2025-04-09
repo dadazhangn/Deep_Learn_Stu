@@ -1,6 +1,6 @@
 import sys, os
 sys.path.append(os.pardir)
-from util import *
+from common.util import *
 import numpy as np
 
 class TwoLayerNet:
