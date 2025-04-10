@@ -27,7 +27,8 @@ for i in range(iters_num):
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
 
-    grad = network.numerical_gradient(x_batch, t_batch)
+    # grad = network.numerical_gradient(x_batch, t_batch)
+    grad = network.gradient(x_batch, t_batch)
 
     for key in ('W1', 'W2', 'b1', 'b2'):
         network.params[key] -= learning_rate * grad[key]

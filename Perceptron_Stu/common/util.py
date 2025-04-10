@@ -59,7 +59,6 @@ def numerical_diff(f, x):
 
 #     return grad
 
-import numpy as np
 
 def numerical_gradient(f, x):
     h = 1e-4  # 微小的值
