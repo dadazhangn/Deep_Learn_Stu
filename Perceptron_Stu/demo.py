@@ -315,6 +315,6 @@ dall_price, dtax = mul_tax_layer.backward(dprice)  # 反向传播
 dapple_price, dorange_price = add_apple_orange_layer.backward(dall_price)  # 反向传播
 dapple, dapple_num = mul_apple_layer.backward(dapple_price)  # 反向传播
 dorange, dorange_num = mul_orange_layer.backward(dorange_price)  # 反向传播
-print(dapple, dapple_num, dorange, dorange_num, dtax)  # 2.2 110.0 4.5 150.0 650.0
+# print(dapple, dapple_num, dorange, dorange_num, dtax)  # 2.2 110.0 4.5 150.0 650.0
 
 
